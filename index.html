@@ -296,7 +296,9 @@ body {
 
 <div class="toolbar">
   <button class="btn btn-add edit-mode-show" onclick="openAddCardModal()">+ 업무 추가</button>
-  <span class="save-status">더블클릭으로 내용 수정 | 배지 클릭으로 상태 변경</span>
+  <button class="btn" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0" onclick="openColorModal()">🎨 색상 설정</button>
+  <button class="btn" style="background:#f1f5f9;color:#475569;border:1px solid #e2e8f0" onclick="openTokenModal()" id="tokenBtn">🔑 GitHub 연결</button>
+  <span class="save-status" id="saveStatus">더블클릭으로 내용 수정 | 배지 클릭으로 상태 변경</span>
 </div>
 
 <!-- ══════════════ 전체 탭 ══════════════ -->
@@ -516,6 +518,22 @@ body {
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeEditModal()">취소</button>
       <button class="btn btn-primary" onclick="saveEditRow()">저장</button>
+    </div>
+  </div>
+</div>
+
+<!-- GitHub 토큰 모달 -->
+<div class="modal-overlay" id="tokenModal">
+  <div class="modal">
+    <h3>🔑 GitHub 자동저장 연결</h3>
+    <p style="font-size:12px;color:#9ca3af;margin-bottom:16px;">토큰을 입력하면 수정할 때마다 GitHub에 자동으로 저장돼요.<br>토큰은 이 브라우저에만 저장되고 외부로 전송되지 않아요.</p>
+    <div class="form-group">
+      <label>GitHub Personal Access Token</label>
+      <input id="tokenInput" type="password" placeholder="ghp_..." style="font-family:monospace;">
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeTokenModal()">취소</button>
+      <button class="btn btn-primary" onclick="saveToken()">저장</button>
     </div>
   </div>
 </div>
@@ -803,6 +821,67 @@ function renderActionItems() {
 }
 
 
+/* ── GitHub 자동저장 ── */
+const GH_TOKEN_KEY = 'gh_token_v1';
+const GH_OWNER = 'korea46331-byte';
+const GH_REPO  = '-';
+const GH_FILE  = 'index.html';
+
+function getToken() { return localStorage.getItem(GH_TOKEN_KEY) || ''; }
+
+async function saveToGitHub() {
+  const token = getToken();
+  if (!token) return;
+  try {
+    // 현재 파일의 SHA 가져오기
+    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`, {
+      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+    });
+    const info = await res.json();
+    const sha = info.sha;
+
+    // 현재 HTML 전체를 base64로 인코딩해서 업로드
+    const html = document.documentElement.outerHTML;
+    const encoded = btoa(unescape(encodeURIComponent(html)));
+
+    await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`, {
+      method: 'PUT',
+      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: '업무 자동저장', content: encoded, sha })
+    });
+
+    const st = document.getElementById('saveStatus');
+    if (st) {
+      st.textContent = '☁️ GitHub 저장됨';
+      st.style.color = '#10b981';
+      setTimeout(() => { st.textContent = '더블클릭으로 내용 수정 | 배지 클릭으로 상태 변경'; st.style.color = ''; }, 2000);
+    }
+  } catch(e) {
+    console.error('GitHub 저장 실패:', e);
+  }
+}
+
+// 저장 디바운스 (3초 후 저장 — 연속 수정 시 마지막 것만)
+let ghSaveTimer = null;
+function scheduleGitHubSave() {
+  clearTimeout(ghSaveTimer);
+  ghSaveTimer = setTimeout(saveToGitHub, 3000);
+}
+
+/* ── 토큰 설정 모달 ── */
+function openTokenModal() { document.getElementById('tokenModal').classList.add('open'); }
+function closeTokenModal() { document.getElementById('tokenModal').classList.remove('open'); }
+function saveToken() {
+  const t = document.getElementById('tokenInput').value.trim();
+  if (!t) return alert('토큰을 입력해주세요');
+  localStorage.setItem(GH_TOKEN_KEY, t);
+  closeTokenModal();
+  const st = document.getElementById('saveStatus');
+  if (st) { st.textContent = '✅ 토큰 저장됨! 이제 자동으로 GitHub에 저장돼요'; st.style.color = '#10b981';
+    setTimeout(() => { st.textContent = '더블클릭으로 내용 수정 | 배지 클릭으로 상태 변경'; st.style.color = ''; }, 2500);
+  }
+}
+
 /* ── 저장 / 불러오기 (localStorage) ── */
 const SAVE_KEY = 'processTeamData_v1';
 
@@ -926,13 +1005,20 @@ function loadFromStorage() {
 function autoSave() {
   saveToStorage();
   renderActionItems();
+  scheduleGitHubSave();
 }
 
 window.addEventListener('DOMContentLoaded', () => {
+  loadColors();
   loadFromStorage();
   renderActionItems();
 
-  // 모든 수정 이벤트에 자동저장 연결
+  // 토큰 있으면 버튼 연결됨 표시
+  if (getToken()) {
+    const btn = document.getElementById('tokenBtn');
+    if (btn) { btn.textContent = '☁️ GitHub 연결됨'; btn.style.background = '#ecfdf5'; btn.style.color = '#166534'; btn.style.border = '1px solid #bbf7d0'; }
+  }
+
   document.addEventListener('blur', e => {
     if (e.target.classList && e.target.classList.contains('editable')) {
       e.target.removeAttribute('contenteditable');
