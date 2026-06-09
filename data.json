@@ -51,6 +51,15 @@
           "owner": "-",
           "memo": "ㅇ",
           "completed": false
+        },
+        {
+          "rid": "r101",
+          "task": "ㅇㅇ",
+          "status": "badge-ing",
+          "date": "",
+          "owner": "-",
+          "memo": "ㅇㅇㅇ",
+          "completed": false
         }
       ]
     },
