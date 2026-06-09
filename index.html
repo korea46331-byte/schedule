@@ -943,8 +943,9 @@ function renderActionItems() {
     if (badge && badge.classList.contains('badge-done')) return;
     const dateInp = row.querySelector('.end-date-input') || row.querySelector('.date-input');
     if (!dateInp || !dateInp.value) return;
-    const date = new Date(dateInp.value);
-    const diffDays = Math.ceil((date - today) / 86400000);
+    const [dy, dm, dd] = dateInp.value.split('-').map(Number);
+    const date = new Date(dy, dm - 1, dd);
+    const diffDays = Math.round((date - today) / 86400000);
     const taskEl = row.querySelector('.td-task');
     const cardName = row.closest('.work-card')?.querySelector('.work-card-name')?.textContent.trim() || '';
     const ownerEl = row.querySelector('.td-owner');
