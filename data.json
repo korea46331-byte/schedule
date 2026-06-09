@@ -33,6 +33,15 @@
           "owner": "-",
           "memo": "-",
           "completed": false
+        },
+        {
+          "rid": "r100",
+          "task": "과제 협약",
+          "status": "badge-ing",
+          "date": "2026-06-30",
+          "owner": "엄재인",
+          "memo": "-",
+          "completed": false
         }
       ]
     },
