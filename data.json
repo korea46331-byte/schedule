@@ -53,18 +53,9 @@
       "colorCls": "color-green",
       "rows": [
         {
-          "rid": "r4",
-          "task": "PT 분말 한시적 식품원료 인정 — 식약처 심사 대응",
-          "status": "badge-ing",
-          "date": "2026-09-16",
-          "owner": "-",
-          "memo": "3/27 제출, 120일 심사, 보완요청 예상",
-          "completed": false
-        },
-        {
           "rid": "r5",
           "task": "파라밀론 (유글레나 베타글루칸) 한시적 식품원료 인정 신청",
-          "status": "badge-plan",
+          "status": "badge-ing",
           "date": "",
           "owner": "-",
           "memo": "마리비온 자료 수령 착수 필요",
