@@ -987,123 +987,146 @@ function applyColors() {
 const GH_TOKEN_KEY = 'gh_token_v1';
 const GH_OWNER = 'korea46331-byte';
 const GH_REPO  = '-';
-const GH_FILE  = 'index.html';
+const GH_DATA  = 'data.json';
 
 function getToken() { return localStorage.getItem(GH_TOKEN_KEY) || ''; }
 
-async function saveToGitHub() {
-  const token = getToken();
-  if (!token) return;
-  try {
-    // 현재 파일의 SHA 가져오기
-    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`, {
-      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
-    });
-    const info = await res.json();
-    const sha = info.sha;
-
-    // 현재 HTML 전체를 base64로 인코딩해서 업로드
-    const html = document.documentElement.outerHTML;
-    const encoded = btoa(unescape(encodeURIComponent(html)));
-
-    await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_FILE}`, {
-      method: 'PUT',
-      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: '업무 자동저장', content: encoded, sha })
-    });
-
-    const st = document.getElementById('saveStatus');
-    if (st) {
-      st.textContent = '☁️ GitHub 저장됨';
-      st.style.color = '#10b981';
-      setTimeout(() => { st.textContent = '더블클릭으로 내용 수정 | 배지 클릭으로 상태 변경'; st.style.color = ''; }, 2000);
-    }
-  } catch(e) {
-    console.error('GitHub 저장 실패:', e);
-  }
-}
-
-// 저장 디바운스 (3초 후 저장 — 연속 수정 시 마지막 것만)
-let ghSaveTimer = null;
-function scheduleGitHubSave() {
-  clearTimeout(ghSaveTimer);
-  ghSaveTimer = setTimeout(saveToGitHub, 3000);
-}
-
-/* ── 토큰 설정 모달 ── */
-function openTokenModal() { document.getElementById('tokenModal').classList.add('open'); }
-function closeTokenModal() { document.getElementById('tokenModal').classList.remove('open'); }
-function saveToken() {
-  const t = document.getElementById('tokenInput').value.trim();
-  if (!t) return alert('토큰을 입력해주세요');
-  localStorage.setItem(GH_TOKEN_KEY, t);
-  closeTokenModal();
-  const st = document.getElementById('saveStatus');
-  if (st) { st.textContent = '✅ 토큰 저장됨! 이제 자동으로 GitHub에 저장돼요'; st.style.color = '#10b981';
-    setTimeout(() => { st.textContent = '더블클릭으로 내용 수정 | 배지 클릭으로 상태 변경'; st.style.color = ''; }, 2500);
-  }
-}
-
-/* ── 저장 / 불러오기 (localStorage) ── */
-const SAVE_KEY = 'processTeamData_v1';
-
-function saveToStorage() {
-  // 모든 work-card의 상태를 직렬화해서 저장
+/* ── 데이터 직렬화 ── */
+function collectData() {
   const cards = [];
   document.querySelectorAll('#tab-all .work-card').forEach(card => {
     const rows = [];
     card.querySelectorAll('tr[data-rid]').forEach(row => {
-      const badge    = row.querySelector('.badge');
-      const dateInp  = row.querySelector('.date-input');
-      const taskEl   = row.querySelector('.td-task');
-      const ownerEl  = row.querySelector('.td-owner');
-      const memoEl   = row.querySelector('.td-memo');
+      const badge   = row.querySelector('.badge');
+      const dateInp = row.querySelector('.date-input');
+      const taskEl  = row.querySelector('.td-task');
+      const ownerEl = row.querySelector('.td-owner');
+      const memoEl  = row.querySelector('.td-memo');
       rows.push({
         rid:       row.dataset.rid,
-        task:      taskEl   ? taskEl.textContent.trim()   : '',
+        task:      taskEl   ? taskEl.textContent.trim()  : '',
         status:    badge    ? (badgeCycleArr.find(c => badge.classList.contains(c)) || 'badge-ing') : 'badge-ing',
-        date:      dateInp  ? dateInp.value               : '',
-        owner:     ownerEl  ? ownerEl.textContent.trim()  : '-',
-        memo:      memoEl   ? memoEl.textContent.trim()   : '-',
+        date:      dateInp  ? dateInp.value              : '',
+        owner:     ownerEl  ? ownerEl.textContent.trim() : '-',
+        memo:      memoEl   ? memoEl.textContent.trim()  : '-',
         completed: row.classList.contains('row-completed')
       });
     });
     const cardBadge = card.querySelector('.work-card-badge');
+    const headerEl  = card.querySelector('.work-card-header');
     cards.push({
       wid:      card.dataset.wid,
       cat:      card.dataset.cat,
       name:     card.querySelector('.work-card-name')?.textContent.trim() || '',
       status:   cardBadge ? (badgeCycleArr.find(c => cardBadge.classList.contains(c)) || 'badge-ing') : 'badge-ing',
-      colorCls: card.querySelector('.work-card-header')?.className.replace('work-card-header','').trim() || 'color-blue',
+      colorCls: headerEl  ? headerEl.className.replace('work-card-header','').trim() : 'cat-project',
       rows
     });
   });
-  localStorage.setItem(SAVE_KEY, JSON.stringify(cards));
-  // 저장 표시
+  // 헤더 메타도 저장
+  const metaEls = document.querySelectorAll('.meta-editable');
+  const meta = Array.from(metaEls).map(el => el.textContent.trim());
+  return { cards, meta };
+}
+
+/* ── GitHub data.json 저장 ── */
+let ghSaveTimer = null;
+let dataSha = null; // data.json의 현재 SHA
+
+async function saveToGitHub() {
+  const token = getToken();
+  if (!token) return;
   const st = document.getElementById('saveStatus');
-  if (st) {
-    st.textContent = '✅ 저장됨';
-    st.style.color = '#10b981';
-    setTimeout(() => { st.textContent = '더블클릭으로 내용 수정 | 배지 클릭으로 상태 변경'; st.style.color = ''; }, 1500);
+  try {
+    const data = collectData();
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+    const url = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_DATA}`;
+    const body = { message: '업무 자동저장', content };
+    if (dataSha) body.sha = dataSha;
+
+    const res = await fetch(url, {
+      method: 'PUT',
+      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const result = await res.json();
+    if (result.content) {
+      dataSha = result.content.sha;
+      if (st) { st.textContent = '☁️ 저장됨'; st.style.color = '#10b981'; setTimeout(() => { st.textContent = '더블클릭으로 수정 | 배지 클릭으로 상태 변경'; st.style.color = ''; }, 2000); }
+    } else {
+      // SHA 충돌 시 다시 가져와서 재시도
+      await refreshSha();
+      await saveToGitHub();
+    }
+  } catch(e) {
+    console.error('GitHub 저장 실패:', e);
+    if (st) { st.textContent = '⚠️ 저장 실패'; st.style.color = '#ef4444'; setTimeout(() => { st.textContent = '더블클릭으로 수정 | 배지 클릭으로 상태 변경'; st.style.color = ''; }, 2000); }
   }
 }
 
-function loadFromStorage() {
+async function refreshSha() {
+  const token = getToken();
+  if (!token) return;
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_DATA}`, {
+      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+    });
+    if (res.ok) { const info = await res.json(); dataSha = info.sha; }
+  } catch(e) {}
+}
+
+function scheduleGitHubSave() {
+  clearTimeout(ghSaveTimer);
+  ghSaveTimer = setTimeout(saveToGitHub, 2000);
+}
+
+/* ── GitHub data.json 불러오기 ── */
+async function loadFromGitHub() {
+  const token = getToken();
+  if (!token) { loadFromLocalStorage(); return; }
+  try {
+    const res = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_DATA}?t=${Date.now()}`, {
+      headers: { Authorization: `token ${token}`, Accept: 'application/vnd.github.v3+json' }
+    });
+    if (!res.ok) { loadFromLocalStorage(); return; }
+    const info = await res.json();
+    dataSha = info.sha;
+    const raw = decodeURIComponent(escape(atob(info.content.replace(/\n/g,''))));
+    const data = JSON.parse(raw);
+    renderData(data);
+  } catch(e) {
+    console.error('GitHub 불러오기 실패:', e);
+    loadFromLocalStorage();
+  }
+}
+
+/* ── localStorage 백업 저장/불러오기 ── */
+const SAVE_KEY = 'processTeamData_v2';
+function saveToLocalStorage() {
+  localStorage.setItem(SAVE_KEY, JSON.stringify(collectData()));
+}
+function loadFromLocalStorage() {
   const raw = localStorage.getItem(SAVE_KEY);
   if (!raw) return;
-  let cards;
-  try { cards = JSON.parse(raw); } catch(e) { return; }
+  try { renderData(JSON.parse(raw)); } catch(e) {}
+}
 
-  // 섹션 그룹 초기화
+/* ── 데이터로 화면 렌더링 ── */
+function renderData(data) {
+  if (!data || !data.cards) return;
+  // 헤더 메타 복원
+  if (data.meta) {
+    const metaEls = document.querySelectorAll('.meta-editable');
+    data.meta.forEach((txt, i) => { if (metaEls[i]) metaEls[i].textContent = txt; });
+  }
+  // 섹션 초기화
   ['project','analysis','permit','etc'].forEach(cat => {
     const sg = document.getElementById('sg-' + cat);
     if (sg) sg.innerHTML = '';
   });
-
-  cards.forEach(cd => {
+  data.cards.forEach(cd => {
     const sg = document.getElementById('sg-' + cd.cat);
     if (!sg) return;
-    // 카드 생성
     const card = document.createElement('div');
     card.className = 'work-card';
     card.dataset.cat = cd.cat;
@@ -1137,14 +1160,12 @@ function loadFromStorage() {
         <td class="td-owner editable">${r.owner}</td>
         <td class="td-memo editable">${r.memo}</td>
         <td class="td-action"><div class="row-actions">
-          
           <button class="btn-ok" onclick="completeRow(this)">✓완료</button>
           <button class="btn-del" onclick="deleteRow(this)">삭제</button>
           ${r.completed ? '<button class="btn-undo" onclick="undoComplete(this)">↩되돌리기</button>' : ''}
         </div></td>`;
       tbody.appendChild(tr);
     });
-    // 추가 입력행
     const addRow = document.createElement('tr');
     addRow.className = 'add-sub-row';
     addRow.innerHTML = `<td></td>
@@ -1160,25 +1181,44 @@ function loadFromStorage() {
     tbody.appendChild(addRow);
     sg.appendChild(card);
   });
+  applyColorsToDom();
   renderActionItems();
 }
 
-// 자동저장 트리거
+/* ── 자동저장 ── */
 function autoSave() {
-  saveToStorage();
+  saveToLocalStorage();
   renderActionItems();
   scheduleGitHubSave();
 }
 
+/* ── 토큰 설정 모달 ── */
+function openTokenModal() { document.getElementById('tokenModal').classList.add('open'); }
+function closeTokenModal() { document.getElementById('tokenModal').classList.remove('open'); }
+function saveToken() {
+  const t = document.getElementById('tokenInput').value.trim();
+  if (!t) return alert('토큰을 입력해주세요');
+  localStorage.setItem(GH_TOKEN_KEY, t);
+  closeTokenModal();
+  updateTokenBtn(true);
+  loadFromGitHub(); // 토큰 저장 후 바로 GitHub에서 불러오기
+}
+function updateTokenBtn(connected) {
+  const btn = document.getElementById('tokenBtn');
+  if (!btn) return;
+  if (connected) { btn.textContent = '☁️ GitHub 연결됨'; btn.style.background = '#ecfdf5'; btn.style.color = '#166534'; btn.style.border = '1px solid #bbf7d0'; }
+  else { btn.textContent = '🔑 GitHub 연결'; btn.style.background = ''; btn.style.color = ''; btn.style.border = ''; }
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   loadColors();
-  loadFromStorage();
-  renderActionItems();
 
-  // 토큰 있으면 버튼 연결됨 표시
+  // 토큰 있으면 GitHub에서 불러오기, 없으면 localStorage
   if (getToken()) {
-    const btn = document.getElementById('tokenBtn');
-    if (btn) { btn.textContent = '☁️ GitHub 연결됨'; btn.style.background = '#ecfdf5'; btn.style.color = '#166534'; btn.style.border = '1px solid #bbf7d0'; }
+    updateTokenBtn(true);
+    loadFromGitHub();
+  } else {
+    loadFromLocalStorage();
   }
 
   document.addEventListener('blur', e => {
