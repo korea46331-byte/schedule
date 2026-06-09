@@ -991,7 +991,7 @@ function renderActionItems() {
     if (row.classList.contains('row-completed')) return;
     const badge = row.querySelector('.badge');
     if (badge && badge.classList.contains('badge-done')) return;
-    const dateInp = row.querySelector('.date-input');
+    const dateInp = row.querySelector('.end-date-input') || row.querySelector('.date-input');
     if (!dateInp || !dateInp.value) return;
     const date = new Date(dateInp.value);
     const diffDays = Math.ceil((date - today) / 86400000);
