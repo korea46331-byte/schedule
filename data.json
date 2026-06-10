@@ -365,6 +365,16 @@
           "owner": "-",
           "memo": "회의자료 준비 푸코잔틴 OEM 관련 자료 작성",
           "completed": false
+        },
+        {
+          "rid": "r100",
+          "task": "주간회의 자료 작성",
+          "status": "badge-ing",
+          "startDate": "2026-06-10",
+          "date": "2026-06-11",
+          "owner": "-",
+          "memo": "주간회의 자료 작성",
+          "completed": false
         }
       ]
     }
