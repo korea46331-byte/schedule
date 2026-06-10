@@ -269,6 +269,16 @@
           "owner": "황태희",
           "memo": "구연산 세척분말 1kg 전달 완료 (EPA, 미생물 분석의뢰)",
           "completed": false
+        },
+        {
+          "rid": "r100",
+          "task": "PT 분말 2kg 확보 (간건강 IP 제조)",
+          "status": "badge-ing",
+          "startDate": "2026-06-12",
+          "date": "2026-06-22",
+          "owner": "-",
+          "memo": "500g+600~700g(예상),",
+          "completed": false
         }
       ]
     },
