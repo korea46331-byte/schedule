@@ -349,12 +349,12 @@
         {
           "rid": "r101",
           "task": "(주)유에스알 계약금 입금",
-          "status": "badge-done",
+          "status": "badge-ing",
           "startDate": "2026-05-01",
           "date": "2026-06-10",
           "owner": "엄재인",
           "memo": "RCMS에서 500만원 지급 요청 (대표님) 메일 전송 완료",
-          "completed": true
+          "completed": false
         },
         {
           "rid": "r101",
