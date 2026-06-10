@@ -15,6 +15,7 @@
           "date": "2026-12-31",
           "owner": "김세민",
           "memo": "-TL 분석법 set up 완료 (fucoxanthin)\n-아티초크 분석법 set up 완료 (Chlorogenic acid, cynarin)\n-복합소재 동시 분석법 set up 완료",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -25,6 +26,7 @@
           "date": "2026-12-31",
           "owner": "김세민",
           "memo": "-미정",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -35,6 +37,7 @@
           "date": "2026-12-31",
           "owner": "김세민",
           "memo": "-미정",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -45,6 +48,7 @@
           "date": "2026-06-30",
           "owner": "엄재인",
           "memo": "- 협약 서류 전달 완료 전자계약 진행 예정-\n- KIST CNM -과제 계약\n- EZbaro - 연구비 집행",
+          "nextPlan": "",
           "completed": false
         }
       ]
@@ -64,6 +68,7 @@
           "date": "2026-12-31",
           "owner": "엄재인김성희",
           "memo": "- 3Lot 분말 1kg \n- 필요마리비온 자료 수령 필요\n- 성분분석섭취량 평가 필요",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -74,6 +79,7 @@
           "date": "2026-06-30",
           "owner": "엄재인",
           "memo": "GRAS 컨설팅 업체 Pre Consulatation 계약 완료\nFDA에 질문리스트 작성 후 제출 - 답변 확인 후 본게임",
+          "nextPlan": "",
           "completed": false
         }
       ]
@@ -93,6 +99,7 @@
           "date": "2026-07-31",
           "owner": "황태희",
           "memo": "-미세조류 30종 바이오매스 확보\n-30종 검수사진",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -103,6 +110,7 @@
           "date": "2026-08-31",
           "owner": "황태희",
           "memo": "-30종 추출 및 분주",
+          "nextPlan": "",
           "completed": false
         }
       ]
@@ -122,6 +130,7 @@
           "date": "2026-06-18",
           "owner": "한철호",
           "memo": "PT 생산량 증대 실험 (N, P함량 조절), 반복실험",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -132,6 +141,7 @@
           "date": "",
           "owner": "한철호",
           "memo": "미정",
+          "nextPlan": "",
           "completed": false
         }
       ]
@@ -151,6 +161,7 @@
           "date": "",
           "owner": "한철호",
           "memo": "seed 유지",
+          "nextPlan": "",
           "completed": false
         }
       ]
@@ -170,6 +181,7 @@
           "date": "2026-06-25",
           "owner": "김세민",
           "memo": "라이코펜, B-carotene 정량 완료",
+          "nextPlan": "",
           "completed": false
         }
       ]
@@ -189,6 +201,7 @@
           "date": "2026-06-30",
           "owner": "김세민",
           "memo": "줄기 추출 완료 (가시 O, X)\n잎 추출 진행 중",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -199,6 +212,7 @@
           "date": "2026-07-31",
           "owner": "김세민",
           "memo": "표준품 구매 완료 \n분석법 set up",
+          "nextPlan": "",
           "completed": false
         }
       ]
@@ -218,6 +232,7 @@
           "date": "",
           "owner": "김세민",
           "memo": "-500ppm 감소 시작 (33주), 300ppm 함량 유지 (39주)",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -228,6 +243,7 @@
           "date": "",
           "owner": "김세민",
           "memo": "1,000~10,000 ppm 함량 유지(20주)",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -238,6 +254,7 @@
           "date": "",
           "owner": "김세민",
           "memo": "함량 유지 (7주)",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -248,6 +265,7 @@
           "date": "",
           "owner": "김세민",
           "memo": "함량유지 (7주)",
+          "nextPlan": "",
           "completed": false
         }
       ]
@@ -267,6 +285,7 @@
           "date": "2026-07-31",
           "owner": "황태희",
           "memo": "- 부재료 구매완료, 캡슐·알루통\n- PT분말 확보 중",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -277,6 +296,7 @@
           "date": "2026-06-30",
           "owner": "김세민",
           "memo": "0주 2주 12주 24주 48주 (25, 30, 40도)\n시료 수령완료 from 종근당바이오",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -287,6 +307,7 @@
           "date": "2026-05-19",
           "owner": "",
           "memo": "체지방 기능성 (종근당바이오)",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -297,6 +318,7 @@
           "date": "2026-06-08",
           "owner": "황태희",
           "memo": "구연산 세척분말 1kg 전달 완료 (EPA, 미생물 분석의뢰)",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -307,6 +329,7 @@
           "date": "2026-06-22",
           "owner": "-",
           "memo": "500g+600~700g(예상), = 1~1.2kg\n11일 wet 6kg wash -> 12일 동걸견조",
+          "nextPlan": "",
           "completed": false
         }
       ]
@@ -326,6 +349,7 @@
           "date": "2025-03-25",
           "owner": "엄재인",
           "memo": "눈건강 기능성",
+          "nextPlan": "",
           "completed": false
         }
       ]
@@ -345,6 +369,7 @@
           "date": "2026-09-17",
           "owner": "엄재인",
           "memo": "working day 120일\n30일 남겨놓고 보완 요청 가능성 높음",
+          "nextPlan": "",
           "completed": false
         }
       ]
@@ -364,6 +389,7 @@
           "date": "2026-06-30",
           "owner": "엄재인",
           "memo": "권용관 부장님 업무",
+          "nextPlan": "",
           "completed": false
         }
       ]
@@ -383,6 +409,7 @@
           "date": "2026-06-19",
           "owner": "엄재인",
           "memo": "견적 확인",
+          "nextPlan": "",
           "completed": false
         },
         {
@@ -393,6 +420,7 @@
           "date": "2026-06-10",
           "owner": "엄재인",
           "memo": "RCMS에서 500만원 지급 요청 (대표님) 메일 전송 완료",
+          "nextPlan": "",
           "completed": true
         },
         {
@@ -403,6 +431,7 @@
           "date": "2026-06-11",
           "owner": "-",
           "memo": "회의자료 준비 및 푸코잔틴 OEM 관련 자료 작성",
+          "nextPlan": "",
           "completed": false
         }
       ]
