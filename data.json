@@ -81,6 +81,17 @@
           "memo": "GRAS 컨설팅 업체 Pre Consulatation 계약 완료\nFDA에 질문리스트 작성 후 제출 - 답변 확인 후 본게임",
           "nextPlan": "",
           "completed": false
+        },
+        {
+          "rid": "r104",
+          "task": "파라밀론 분말 제조공정 등 자료요청",
+          "status": "badge-ing",
+          "startDate": "2026-06-16",
+          "date": "2026-07-17",
+          "owner": "-",
+          "memo": "자료요청 항목 정리 및 메뉴얼 정리",
+          "nextPlan": "",
+          "completed": false
         }
       ]
     },
