@@ -444,6 +444,17 @@
           "memo": "회의자료 준비 및 푸코잔틴 OEM 관련 자료 작성",
           "nextPlan": "",
           "completed": true
+        },
+        {
+          "rid": "r105",
+          "task": "유선전화",
+          "status": "badge-ing",
+          "startDate": "2026-06-18",
+          "date": "2026-06-26",
+          "owner": "-",
+          "memo": "길마루 이사님 전화",
+          "nextPlan": "",
+          "completed": false
         }
       ]
     }
