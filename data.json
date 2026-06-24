@@ -319,7 +319,7 @@
           "owner": "",
           "memo": "체지방 기능성 (종근당바이오)",
           "nextPlan": "",
-          "completed": false
+          "completed": true
         },
         {
           "rid": "r100",
@@ -330,18 +330,18 @@
           "owner": "황태희",
           "memo": "구연산 세척분말 1kg 전달 완료 (EPA, 미생물 분석의뢰)",
           "nextPlan": "",
-          "completed": false
+          "completed": true
         },
         {
           "rid": "r100",
           "task": "PT 분말 2kg 확보 (간건강 IP 제조)",
-          "status": "badge-ing",
+          "status": "badge-done",
           "startDate": "2026-06-12",
           "date": "2026-06-22",
           "owner": "-",
           "memo": "500g+600~700g(예상), = 1~1.2kg\n11일 wet 6kg wash -> 12일 동걸견조",
           "nextPlan": "",
-          "completed": false
+          "completed": true
         }
       ]
     },
