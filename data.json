@@ -136,13 +136,13 @@
         {
           "rid": "r100",
           "task": "PT 2L 실험",
-          "status": "badge-ing",
+          "status": "badge-done",
           "startDate": "2026-06-08",
           "date": "2026-06-18",
           "owner": "한철호",
           "memo": "PT 생산량 증대 실험 (N, P함량 조절), 반복실험",
           "nextPlan": "",
-          "completed": false
+          "completed": true
         },
         {
           "rid": "r101",
