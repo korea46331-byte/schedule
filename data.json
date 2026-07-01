@@ -74,13 +74,13 @@
         {
           "rid": "r6",
           "task": "유글레나 분말 GRAS 인증",
-          "status": "badge-ing",
+          "status": "badge-done",
           "startDate": "2026-05-01",
           "date": "2026-06-30",
           "owner": "엄재인",
           "memo": "GRAS 컨설팅 업체 Pre Consulatation 계약 완료\nFDA에 질문리스트 작성 후 제출 - 답변 확인 후 본게임",
           "nextPlan": "",
-          "completed": false
+          "completed": true
         },
         {
           "rid": "r104",
