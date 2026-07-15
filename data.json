@@ -375,13 +375,13 @@
         {
           "rid": "r100",
           "task": "PT분말 한시적 식품원료 신청",
-          "status": "badge-ing",
+          "status": "badge-done",
           "startDate": "2026-03-30",
           "date": "2026-09-17",
           "owner": "엄재인",
           "memo": "working day 120일\n30일 남겨놓고 보완 요청 가능성 높음",
           "nextPlan": "",
-          "completed": false
+          "completed": true
         }
       ]
     },
